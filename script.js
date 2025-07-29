@@ -1,12 +1,12 @@
 // script.js
 
 // Element references
-const introBox = document.getElementById('introBox');
-const mainContent = document.getElementById('mainContent');
-const terminal = document.getElementById('terminal');
-const continueButton = document.getElementById('continueButton');
-const thankYouPopup = document.getElementById('thankYouPopup');
-const startBtn = document.getElementById('startBtn');
+const introBox = document.querySelector('.intro-box');
+const main = document.querySelector('main');
+const terminal = document.querySelector('.terminal');
+const continueBtn = document.getElementById('continueBtn');
+const thankyouPopup = document.querySelector('.thankyou-popup');
+const startBtn = document.querySelector('.intro-box .primary-button');
 
 let stepIndex = 0;
 let isTyping = false;
@@ -65,25 +65,26 @@ const steps = [
   '{Click to finish}'
 ];
 
-// Start button handler
-startBtn.onclick = () => {
-  introBox.style.display = 'none';
-  mainContent.style.display = 'flex';
+// Start the experience
+startBtn.addEventListener('click', () => {
+  introBox.classList.add('hidden');
+  main.classList.remove('hidden');
   nextStep();
-};
+});
 
 // Advance to the next step
 function nextStep() {
   const current = steps[stepIndex];
 
-  // If it's a click-prompt, show it and wait
+  // Show click prompt
   if (current.startsWith('{Click')) {
     terminal.innerHTML += current + '\n';
-    continueButton.style.display = 'block';
+    continueBtn.style.display = 'block';
+    continueBtn.classList.add('pulse');
     return;
   }
 
-  // Otherwise, type it out
+  // Typing animation
   isTyping = true;
   typeLine(current, () => {
     isTyping = false;
@@ -92,7 +93,7 @@ function nextStep() {
   });
 }
 
-// Typing effect
+// Typing effect helper
 function typeLine(text, callback, i = 0) {
   if (i < text.length) {
     terminal.innerHTML += text.charAt(i);
@@ -104,21 +105,17 @@ function typeLine(text, callback, i = 0) {
   }
 }
 
-// Continue button click
-continueButton.onclick = () => {
+// Continue button handler
+continueBtn.addEventListener('click', () => {
   if (isTyping) return;
-  continueButton.style.display = 'none';
+  continueBtn.style.display = 'none';
+  continueBtn.classList.remove('pulse');
 
   if (steps[stepIndex] === '{Click to finish}') {
-    finishExperience();
+    thankyouPopup.style.display = 'block';
   } else {
     stepIndex++;
     nextStep();
   }
-};
-
-// Final popup
-function finishExperience() {
-  thankYouPopup.style.display = 'block';
-}
+});
 ```0
