@@ -1,20 +1,17 @@
-const intro = document.getElementById('intro');
-const main = document.getElementById('main');
+// script.js
+
+// Element references
+const introBox = document.getElementById('introBox');
+const mainContent = document.getElementById('mainContent');
 const terminal = document.getElementById('terminal');
-const thankyou = document.getElementById('thankyou');
-const continueBtn = document.getElementById('continueBtn');
+const continueButton = document.getElementById('continueButton');
+const thankYouPopup = document.getElementById('thankYouPopup');
 const startBtn = document.getElementById('startBtn');
 
 let stepIndex = 0;
-let username = '';
-let isTyping = false; // <- fix: typing lock
+let isTyping = false;
 
-startBtn.onclick = () => {
-  intro.classList.add('hidden');
-  main.classList.remove('hidden');
-  nextStep();
-};
-
+// The sequence of terminal lines and click prompts
 const steps = [
   '> Start Your Trusted Ceremony Setup',
   '{Click to Start}',
@@ -22,8 +19,14 @@ const steps = [
   '> Checking entropy source... ✓',
   '> Verifying secure randomness generator... ✓',
   '> Establishing connection with Union Coordinator Node...',
-  '> Device Detected:\n   - OS: Ubuntu 20.04.6 LTS\n   - RAM: 16 GB\n   - Architecture: x86_64\n   - IP Range: 152.64.XX.XX\n   - CPU: Intel(R) Core(TM) i7-10700K @ 3.80GHz',
-  '> Generating entropy...\n█████████▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 14%',
+  '> Device Detected:',
+  '   - OS: Ubuntu 20.04.6 LTS',
+  '   - RAM: 16 GB',
+  '   - Architecture: x86_64',
+  '   - IP Range: 152.64.XX.XX',
+  '   - CPU: Intel(R) Core(TM) i7-10700K @ 3.80GHz',
+  '> Generating entropy...',
+  '█████████▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 14%',
   '{Click to continue}',
   '> Mixing entropy with ZK-verified randomness stream...',
   '> Encrypting contribution with GPG key [0x4B7C3F2E]...',
@@ -45,7 +48,7 @@ const steps = [
   '██████████████████████████████████████████▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 86%',
   '{Click to continue}',
   '> Publishing public attestation link...',
-  '   - https://ceremony.union.build/user/{username}',
+  '   - https://ceremony.union.build/user/shinosuka_eth',
   '   - Status: ✅ Published',
   '> Broadcasting attestation to decentralized messaging network...',
   '██████████████████████████████████████████████████████████▒▒▒▒▒▒▒ 97%',
@@ -54,50 +57,33 @@ const steps = [
   '> Updating contributor index (ID: 4728)',
   '> Thanking participant...',
   '████████████████████████████████████████████████████████████████ 100%',
-  '> 🎉 Congratulations!\nYou have successfully completed the Union Trusted Ceremony Setup.\n\nYour single contribution plays a critical role in the generation of Union’s decentralized ZK parameters.\nThis ceremony stands as the largest Groth16 setup in history — backed by over 5000 participants across the world.\nThanks to you, we inch closer to a truly interoperable, trustless future.',
+  '> 🎉 Congratulations!',
+  'You have successfully completed the Union Trusted Ceremony Setup.',
+  'Your single contribution plays a critical role in the generation of Union’s decentralized ZK parameters.',
+  'This ceremony stands as the largest Groth16 setup in history — backed by over 5000 participants across the world.',
+  'Thanks to you, we inch closer to a truly interoperable, trustless future.',
   '{Click to finish}'
 ];
 
+// Start button handler
+startBtn.onclick = () => {
+  introBox.style.display = 'none';
+  mainContent.style.display = 'flex';
+  nextStep();
+};
+
+// Advance to the next step
 function nextStep() {
   const current = steps[stepIndex];
 
+  // If it's a click-prompt, show it and wait
   if (current.startsWith('{Click')) {
     terminal.innerHTML += current + '\n';
-    continueBtn.classList.remove('hidden');
-    continueBtn.classList.add('pulse');
+    continueButton.style.display = 'block';
     return;
   }
 
-  if (current === 'Enter your username:') {
-    terminal.innerHTML += '> ' + current + '\n';
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.placeholder = 'e.g. shinosuka_eth';
-    input.onkeydown = function (e) {
-      if (e.key === 'Enter') {
-        username = input.value || 'anonymous_user';
-        terminal.removeChild(input);
-        stepIndex++;
-        showNextWithUsername();
-      }
-    };
-    terminal.appendChild(input);
-    input.focus();
-    terminal.scrollTop = terminal.scrollHeight;
-    return;
-  }
-
-  let line = current.includes('{username}') ? current.replace('{username}', username) : current;
-  isTyping = true;
-  typeLine(line, () => {
-    isTyping = false;
-    stepIndex++;
-    nextStep();
-  });
-}
-
-function showNextWithUsername() {
-  const current = steps[stepIndex].replace('{username}', username);
+  // Otherwise, type it out
   isTyping = true;
   typeLine(current, () => {
     isTyping = false;
@@ -106,25 +92,24 @@ function showNextWithUsername() {
   });
 }
 
+// Typing effect
 function typeLine(text, callback, i = 0) {
   if (i < text.length) {
     terminal.innerHTML += text.charAt(i);
     terminal.scrollTop = terminal.scrollHeight;
-    setTimeout(() => typeLine(text, callback, i + 1), 15);
+    setTimeout(() => typeLine(text, callback, i + 1), 20);
   } else {
     terminal.innerHTML += '\n';
     callback();
   }
 }
 
-continueBtn.onclick = () => {
-  if (isTyping) return; // prevent mid-type clicking
+// Continue button click
+continueButton.onclick = () => {
+  if (isTyping) return;
+  continueButton.style.display = 'none';
 
-  continueBtn.classList.add('hidden');
-  continueBtn.classList.remove('pulse');
-
-  const current = steps[stepIndex];
-  if (current === '{Click to finish}') {
+  if (steps[stepIndex] === '{Click to finish}') {
     finishExperience();
   } else {
     stepIndex++;
@@ -132,7 +117,8 @@ continueBtn.onclick = () => {
   }
 };
 
+// Final popup
 function finishExperience() {
-  thankyou.classList.remove('hidden');
-  thankyou.scrollIntoView({ behavior: 'smooth' });
+  thankYouPopup.style.display = 'block';
 }
+```0
