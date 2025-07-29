@@ -1,178 +1,116 @@
-/* ========== General Reset ========== */
-* {
+body {
   margin: 0;
-  padding: 0;
+  font-family: 'JetBrains Mono', monospace;
+  background-color: #000;
+  color: #A9ECFD;
+}
+
+.hidden {
+  display: none;
+}
+
+.intro-box {
+  border: 1px solid #A9ECFD;
+  width: 80%;
+  max-width: 700px;
+  margin: 15vh auto;
+  padding: 40px;
+  text-align: center;
+  background: #000;
   box-sizing: border-box;
 }
 
-/* ========== Body & Layout ========== */
-html, body {
-  height: 100%;
-  background-color: #000;
-  color: #A9ECFD;
-  font-family: 'JetBrains Mono', monospace;
-  overflow: hidden;
+.primary-button {
+  margin-top: 30px;
+  padding: 12px 24px;
+  background-color: #A9ECFD;
+  color: #000;
+  border: none;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
-#mainContent {
-  display: none; /* Shown after intro */
-  flex-direction: column;
-  height: 100%;
+.pulse {
+  animation: pulse-glow 1.5s infinite;
 }
 
-/* ========== Header ========== */
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(169, 236, 253, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(169, 236, 253, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(169, 236, 253, 0);
+  }
+}
+
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 16px;
+  padding: 10px 20px;
   border-bottom: 1px solid #A9ECFD;
-  font-size: 12px;
-  font-weight: 600;
 }
 
 .logo {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 .logo img {
-  height: 20px;
+  height: 24px;
   width: auto;
-  margin-right: 6px;
+  margin-right: 8px;
 }
 
-.logo span {
-  font-size: 14px;
+.logo strong {
   font-weight: 900;
+  font-size: 18px;
 }
 
-.main-heading {
-  flex-grow: 1;
-  text-align: center;
-  font-size: 12px;
+.heading {
+  font-size: 14px;
   letter-spacing: 1px;
 }
 
-/* ========== Intro Box ========== */
-#introBox {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #000;
-  border: 2px solid #A9ECFD;
-  padding: 30px;
-  text-align: center;
-  max-width: 90%;
-  width: 400px;
-  z-index: 10;
-}
-
-.intro-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 16px;
-}
-
-.intro-desc {
-  font-size: 13px;
-  line-height: 1.5;
-  margin-bottom: 24px;
-}
-
-/* ========== Buttons ========== */
-.primary-button {
-  background-color: #A9ECFD;
-  color: #000;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  font-weight: bold;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.primary-button:hover {
-  background-color: #89d7ef;
-}
-
-/* ========== Terminal Section ========== */
-#terminalContainer {
-  display: flex;
-  flex-direction: column;
-  height: calc(100% - 32px); /* header (≈32px) */
-}
-
-#terminal {
-  flex: 1;
-  padding: 16px;
+.terminal {
+  padding: 20px;
+  height: 65vh;
   overflow-y: auto;
   white-space: pre-wrap;
-  font-size: 12px;
-  line-height: 1.4;
-  font-family: 'Source Code Pro', monospace;
-  background: #000;
-}
-
-/* ========== Continue Button ========== */
-#continueButton {
-  position: absolute;
-  top: 48px; /* just below header */
-  right: 20px;
-  display: none;
-  background-color: #A9ECFD;
-  color: #000;
-  border: none;
-  padding: 8px 12px;
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: bold;
-  font-size: 11px;
-  border-radius: 4px;
-  cursor: pointer;
-  animation: pulse 1.5s infinite;
-  z-index: 5;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.07); }
-  100% { transform: scale(1); }
-}
-
-/* ========== Footer ========== */
-footer {
-  padding: 6px 16px;
-  border-top: 1px solid #A9ECFD;
-  font-size: 10px;
-  font-style: italic;
-}
-
-/* ========== Thank You Popup ========== */
-#thankYouPopup {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #000;
-  border: 2px solid #A9ECFD;
-  padding: 24px;
-  max-width: 90%;
-  width: 360px;
-  z-index: 20;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.6;
 }
 
-#thankYouPopup h3 {
-  margin-bottom: 12px;
-  font-size: 16px;
+#continueBtn {
+  display: block;
+  margin: 10px 20px;
+  float: right;
 }
 
-#thankYouPopup p {
-  margin-bottom: 8px;
+footer {
+  clear: both;
+  text-align: center;
+  font-size: 12px;
+  padding: 10px 0;
+  color: #A9ECFD;
 }
-```0
+
+.thankyou-popup {
+  position: fixed;
+  top: 10vh;
+  left: 10vw;
+  width: 80vw;
+  max-width: 600px;
+  padding: 30px;
+  background: #000;
+  border: 1px solid #A9ECFD;
+  color: #A9ECFD;
+  z-index: 10000;
+  font-size: 14px;
+}
