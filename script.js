@@ -7,6 +7,7 @@ const startBtn = document.getElementById('startBtn');
 
 let stepIndex = 0;
 let username = '';
+let isTyping = false; // <- fix: typing lock
 
 startBtn.onclick = () => {
   intro.classList.add('hidden');
@@ -87,7 +88,9 @@ function nextStep() {
   }
 
   let line = current.includes('{username}') ? current.replace('{username}', username) : current;
+  isTyping = true;
   typeLine(line, () => {
+    isTyping = false;
     stepIndex++;
     nextStep();
   });
@@ -95,7 +98,9 @@ function nextStep() {
 
 function showNextWithUsername() {
   const current = steps[stepIndex].replace('{username}', username);
+  isTyping = true;
   typeLine(current, () => {
+    isTyping = false;
     stepIndex++;
     nextStep();
   });
@@ -113,6 +118,8 @@ function typeLine(text, callback, i = 0) {
 }
 
 continueBtn.onclick = () => {
+  if (isTyping) return; // prevent mid-type clicking
+
   continueBtn.classList.add('hidden');
   continueBtn.classList.remove('pulse');
 
