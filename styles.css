@@ -62,6 +62,12 @@ header {
   gap: 10px;
 }
 
+.logo img {
+  height: 24px;
+  width: auto;
+  margin-right: 8px;
+}
+
 .logo strong {
   font-weight: 900;
   font-size: 18px;
